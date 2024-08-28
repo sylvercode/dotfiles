@@ -2,6 +2,8 @@
 sudo rm -rf /etc/localtime
 sudo ln -s /usr/share/zoneinfo/America/Montreal /etc/localtime
 
-pwsh ~/dotfiles/Powershell/InstallPoshModules.ps1
+scriptDirectory=$(dirname "$(readlink -f "$0")")
+
+pwsh $scriptDirectory/Powershell/InstallPoshModules.ps1
 mkdir -p ~/.config/powershell/
-cp ~/dotfiles/Powershell/Microsoft.PowerShell_profile.ps1 ~/.config/powershell/
+cp $scriptDirectory/Powershell/Microsoft.PowerShell_profile.ps1 ~/.config/powershell/
