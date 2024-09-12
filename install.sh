@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 sudo rm -rf /etc/localtime
 sudo ln -s /usr/share/zoneinfo/America/Montreal /etc/localtime
+sudo apt-get install unzip
 
 scriptDirectory=$(dirname "$(readlink -f "$0")")
 
