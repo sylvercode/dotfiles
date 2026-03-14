@@ -10,4 +10,4 @@ cp $scriptDirectory/Powershell/Microsoft.PowerShell_profile.ps1 ~/.config/powers
 
 cp $scriptDirectory/starship.toml ~/.config/starship.toml
 
-pwsh -NoProfileLoadTime -Command  Install-Module posh-git -Scope CurrentUser -Force
+pwsh -NoProfile -Command  Install-Module posh-git -Scope CurrentUser -Force
