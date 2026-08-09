@@ -26,6 +26,17 @@ cp $scriptDirectory/Powershell/Microsoft.PowerShell_profile.ps1 ~/.config/powers
 
 cp $scriptDirectory/starship.toml ~/.config/starship.toml
 
+#change defautl shell to pwsh
+sudo tee /usr/local/bin/pwsh-login > /dev/null <<'EOF'
+#!/usr/bin/env bash
+exec /usr/bin/pwsh -NoLogo -NoProfileLoadTime "$@"
+EOF
+sudo chmod 755 /usr/local/bin/pwsh-login
+
+grep -qxF /usr/local/bin/pwsh-login /etc/shells || echo /usr/local/bin/pwsh-login | sudo tee -a /etc/shells
+
+usermod -s /usr/local/bin/pwsh-login $USER
+
 pwsh -NoProfile -Command "Install-Module posh-git -Scope CurrentUser -Force"
 
 # Docker-in-Docker (from devcontainers/features)
