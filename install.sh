@@ -39,11 +39,11 @@ usermod -s /usr/local/bin/pwsh-login $USER
 
 pwsh -NoProfile -Command "Install-Module posh-git -Scope CurrentUser -Force"
 
-# Docker-in-Docker (from devcontainers/features)
-curl -fsSL https://raw.githubusercontent.com/devcontainers/features/main/src/docker-in-docker/install.sh -o /tmp/docker-in-docker-install.sh
-chmod +x /tmp/docker-in-docker-install.sh
-sudo VERSION="latest" MOBY="false" DOCKERDASHCOMPOSEVERSION="v2" INSTALLDOCKERBUILDX="true" bash /tmp/docker-in-docker-install.sh
-rm -f /tmp/docker-in-docker-install.sh
+# docker-outside-of-docker (from devcontainers/features)
+curl -fsSL https://raw.githubusercontent.com/devcontainers/features/refs/heads/main/src/docker-outside-of-docker/install.sh -o /tmp/docker-outside-of-docker-install.sh
+chmod +x /tmp/docker-outside-of-docker-install.sh
+sudo VERSION="latest" MOBY="false" DOCKERDASHCOMPOSEVERSION="v2" INSTALLDOCKERBUILDX="true" bash /tmp/docker-outside-of-docker-install.sh
+rm -f /tmp/docker-outside-of-docker-install.sh
 
 # GitHub CLI (from devcontainers/features)
 curl -fsSL https://raw.githubusercontent.com/devcontainers/features/main/src/github-cli/install.sh -o /tmp/github-cli-install.sh
@@ -68,3 +68,29 @@ if command -v node > /dev/null 2>&1; then
     npm install -g pnpm@latest
     corepack enable
 fi
+
+# Install delta 
+gh release download --repo dandavison/delta --pattern "*amd64.deb" -D /tmp
+sudo dpkg -i /tmp/git-delta_*.deb
+rm -f /tmp/git-delta_*.deb
+
+# Install eza
+sudo mkdir -p /etc/apt/keyrings
+wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | sudo gpg --dearmor -o /etc/apt/keyrings/gierens.gpg
+echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" | sudo tee /etc/apt/sources.list.d/gierens.list
+sudo chmod 644 /etc/apt/keyrings/gierens.gpg /etc/apt/sources.list.d/gierens.list
+sudo apt update
+sudo apt install -y eza
+
+# Install ripgrep
+gh release download --repo BurntSushi/ripgrep --pattern "*amd64.deb" -D /tmp
+sudo dpkg -i /tmp/ripgrep_*_amd64.deb
+rm -f /tmp/ripgrep_*_amd64.deb
+
+# Install Yazi
+curl -fsSL https://yazi-rs.github.io/builds/yazi-keyring.gpg | sudo tee /usr/share/keyrings/yazi-keyring.gpg >/dev/null
+echo 'deb [signed-by=/usr/share/keyrings/yazi-keyring.gpg] https://yazi-rs.github.io/builds/ stable main' | sudo tee /etc/apt/sources.list.d/yazi.list >/dev/null
+sudo apt update && sudo apt install -y yazi
+
+# Install Micro (getmic.ro)
+curl https://getmic.ro | bash

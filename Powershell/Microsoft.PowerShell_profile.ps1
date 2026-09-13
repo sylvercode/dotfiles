@@ -24,3 +24,19 @@ Set-PSReadLineKeyHandler -Key Ctrl+s -Function ForwardSearchHistory
 Set-PSReadLineKeyHandler -Key Ctrl+u -Function BackwardKillLine
 Set-PSReadLineKeyHandler -Key Ctrl+k -Function KillLine
 Set-PSReadLineKeyHandler -Key Ctrl+y -Function Yank
+
+
+function y {
+    $tmp = (New-TemporaryFile).FullName
+    yazi @args --cwd-file="$tmp"
+    $cwd = Get-Content -Path $tmp -Encoding UTF8
+    if ($cwd -and $cwd -ne $PWD.Path -and (Test-Path -LiteralPath $cwd -PathType Container)) {
+        Set-Location -LiteralPath (Resolve-Path -LiteralPath $cwd).Path
+    }
+    Remove-Item -Path $tmp
+}
+
+Remove-Alias ls -ErrorAction SilentlyContinue
+function ls {
+    eza --icons --hyperlink --group-directories-first @args
+}
