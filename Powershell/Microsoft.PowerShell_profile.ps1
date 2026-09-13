@@ -3,6 +3,9 @@ if (Get-Module -ListAvailable -Name posh-git) { Import-Module posh-git }
 $env:PNPM_HOME = "/home/$env:USER/.local/share/pnpm"
 $env:PATH = "$env:PNPM_HOME`:$env:PATH"
 
+$env:PAGER = '/usr/local/bin/moor'
+$env:EDITOR = 'micro'
+
 # Word navigation
 Set-PSReadLineKeyHandler -Key Ctrl+LeftArrow  -Function BackwardWord
 Set-PSReadLineKeyHandler -Key Ctrl+RightArrow -Function NextWord
